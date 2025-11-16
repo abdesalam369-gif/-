@@ -1,0 +1,5 @@
+{
+  "name": "Professional Report Formatter",
+  "description": "An application that takes raw text from a trip report and formats it into a polished, professional, and visually appealing web page. It structures the information with clear headings, sections, and lists for enhanced readability.",
+  "requestFramePermissions": []
+}

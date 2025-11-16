@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Card from './Card';
 import SectionHeader from './SectionHeader';
@@ -6,6 +5,8 @@ import type { SectionWithPoints } from '../types';
 
 interface RecommendationsSectionProps {
   data: SectionWithPoints;
+  onTitleChange: (newTitle: string) => void;
+  onPointChange: (pointIndex: number, newValue: string) => void;
 }
 
 const LightBulbIcon: React.FC = () => (
@@ -14,14 +15,26 @@ const LightBulbIcon: React.FC = () => (
     </svg>
 );
 
-const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({ data }) => {
+const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({ data, onTitleChange, onPointChange }) => {
   return (
     <Card>
       <div className="p-6 md:p-8">
-        <SectionHeader icon={<LightBulbIcon />} title={data.title} />
+        <SectionHeader 
+            icon={<LightBulbIcon />} 
+            title={data.title}
+            onTitleChange={onTitleChange}
+        />
         <ol className="list-decimal list-outside mr-5 space-y-3 text-slate-600">
           {data.points.map((point, index) => (
-            <li key={index} className="pl-2">{point}</li>
+            <li 
+                key={index} 
+                className="pl-2"
+                contentEditable
+                suppressContentEditableWarning
+                onBlur={(e) => onPointChange(index, e.currentTarget.innerText)}
+            >
+                {point}
+            </li>
           ))}
         </ol>
       </div>

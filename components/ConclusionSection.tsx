@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Card from './Card';
 import SectionHeader from './SectionHeader';
@@ -6,6 +5,8 @@ import type { SectionWithPoints } from '../types';
 
 interface ConclusionSectionProps {
   data: SectionWithPoints;
+  onTitleChange: (newTitle: string) => void;
+  onPointChange: (pointIndex: number, newValue: string) => void;
 }
 
 const ClipboardListIcon: React.FC = () => (
@@ -14,20 +15,38 @@ const ClipboardListIcon: React.FC = () => (
     </svg>
 );
 
-const ConclusionSection: React.FC<ConclusionSectionProps> = ({ data }) => {
+const ConclusionSection: React.FC<ConclusionSectionProps> = ({ data, onTitleChange, onPointChange }) => {
   const intro = data.points[0];
   const listItems = data.points.slice(1);
 
   return (
     <Card>
       <div className="p-6 md:p-8">
-        <SectionHeader icon={<ClipboardListIcon />} title={data.title} />
-        <p className="text-slate-600 leading-relaxed mb-4">{intro}</p>
+        <SectionHeader 
+            icon={<ClipboardListIcon />} 
+            title={data.title}
+            onTitleChange={onTitleChange}
+        />
+        <p 
+            className="text-slate-600 leading-relaxed mb-4"
+            contentEditable
+            suppressContentEditableWarning
+            onBlur={(e) => onPointChange(0, e.currentTarget.innerText)}
+        >
+            {intro}
+        </p>
         <ul className="space-y-3">
           {listItems.map((point, index) => (
             <li key={index} className="flex items-start">
               <svg className="w-5 h-5 text-teal-500 mr-3 rtl:ml-3 rtl:mr-0 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>
-              <span className="text-slate-600">{point}</span>
+              <span 
+                className="text-slate-600"
+                contentEditable
+                suppressContentEditableWarning
+                onBlur={(e) => onPointChange(index + 1, e.currentTarget.innerText)}
+              >
+                {point}
+              </span>
             </li>
           ))}
         </ul>

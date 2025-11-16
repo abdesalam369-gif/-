@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Card from './Card';
 import SectionHeader from './SectionHeader';
@@ -6,6 +5,8 @@ import type { Section } from '../types';
 
 interface IntroductionSectionProps {
   data: Section;
+  onTitleChange: (newTitle: string) => void;
+  onParagraphChange: (paragraphIndex: number, newValue: string) => void;
 }
 
 const InformationCircleIcon: React.FC = () => (
@@ -14,14 +15,25 @@ const InformationCircleIcon: React.FC = () => (
     </svg>
 );
 
-const IntroductionSection: React.FC<IntroductionSectionProps> = ({ data }) => {
+const IntroductionSection: React.FC<IntroductionSectionProps> = ({ data, onTitleChange, onParagraphChange }) => {
   return (
     <Card>
       <div className="p-6 md:p-8">
-        <SectionHeader icon={<InformationCircleIcon />} title={data.title} />
+        <SectionHeader 
+            icon={<InformationCircleIcon />} 
+            title={data.title}
+            onTitleChange={onTitleChange}
+        />
         <div className="space-y-4 text-slate-600 leading-relaxed">
           {data.paragraphs.map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
+            <p 
+                key={index}
+                contentEditable
+                suppressContentEditableWarning
+                onBlur={(e) => onParagraphChange(index, e.currentTarget.innerText)}
+            >
+                {paragraph}
+            </p>
           ))}
         </div>
       </div>
